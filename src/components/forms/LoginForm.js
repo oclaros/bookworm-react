@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Validator from "validator";
 import { Button } from "reactstrap";
-import InlineError from '../messages/InlineError';
+import InlineError from "../messages/InlineError";
 
 class LoginForm extends Component {
   constructor() {
@@ -22,25 +22,22 @@ class LoginForm extends Component {
     });
   };
 
-  onSubmit = (e) => {
-      e.preventDefault();
-      const errors = this.validate(this.state.data);
-      this.setState({errors});
-      this.props.onClick(this.state.data);
-  }
+  onSubmit = e => {
+    e.preventDefault();
+    const errors = this.validate(this.state.data);
+    this.setState({ errors });
+    this.props.onClick(this.state.data);
+  };
 
-  validate = (data) => {
+  validate = data => {
     const errors = {};
-    if (!Validator.isEmail(data.email)) errors.email = 'Invalid email';
-    if (!data.password) errors.password = 'password cannot be blank';
+    if (!Validator.isEmail(data.email)) errors.email = "Invalid email";
+    if (!data.password) errors.password = "password cannot be blank";
     return errors;
-  }
+  };
 
   render() {
     const { data, errors } = this.state;
- 
-    const errorText = "Oscar was here";
-    const showMe = false;
     return (
       <div>
         <form onSubmit={this.onSubmit}>
@@ -53,7 +50,6 @@ class LoginForm extends Component {
               name="email"
               aria-describedby="emailHelp"
               placeholder="Enter email"
-              
               value={data.email}
               onChange={this.onChange}
             />
@@ -74,7 +70,6 @@ class LoginForm extends Component {
             {errors.password && <InlineError text={errors.password} />}
           </div>
           <Button color="primary">Login</Button>
-          
         </form>
       </div>
     );
