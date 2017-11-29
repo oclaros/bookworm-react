@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Validator from "validator";
 import { Button } from "reactstrap";
 import InlineError from "../messages/InlineError";
+import PropTypes from "prop-types";
 
 class LoginForm extends Component {
   constructor() {
@@ -26,7 +27,15 @@ class LoginForm extends Component {
     e.preventDefault();
     const errors = this.validate(this.state.data);
     this.setState({ errors });
-    this.props.onClick(this.state.data);
+    //this.props.onClick(this.state.data)
+    if (Object.keys(errors).length === 0) {
+      this.setState({ loading: true });
+      this.props
+        .submit(this.state.data)
+        .catch(err =>
+          this.setState({ errors: err.response.data.errors, loading: false })
+        );
+    }
   };
 
   validate = data => {
@@ -37,10 +46,11 @@ class LoginForm extends Component {
   };
 
   render() {
-    const { data, errors } = this.state;
+    const { data, errors, loading } = this.state;
     return (
       <div>
-        <form onSubmit={this.onSubmit}>
+        {errors.global && <InlineError text={errors.global} />}
+        <form onSubmit={this.onSubmit} >
           <div className="form-group">
             <label htmlFor="email">Email address</label>
             <input
@@ -75,5 +85,9 @@ class LoginForm extends Component {
     );
   }
 }
+
+LoginForm.PropTypes = {
+  submit: PropTypes.func.isRequired
+};
 
 export default LoginForm;
